@@ -34,5 +34,5 @@ HEADERS += $${PUBLIC_HEADERS}
 ### Installation
 target.path = $$[QT_INSTALL_LIBS]
 sources.files = $${PUBLIC_HEADERS}
-sources.path = $$[QT_INSTALL_HEADERS]/communication
+sources.path = $$[QT_INSTALL_HEADERS]/QtCommunication
 INSTALLS += target sources
