@@ -1,0 +1,32 @@
+Qt Communication Library
+========================
+Qt Communication Library is a multiplatform C++ library written for
+communication with custom devices e.g. via serial port.
+
+Supported Platforms
+===================
+The functionality has been tested on the following platforms:
+  * Windows XP SP3
+  * Arch Linux 32-bit and 64-bit
+  * Mac OS X 10.6
+
+Compiling sources
+=================
+Prerequisites:
+  * Qt 4.x
+  * Qt SDK or development tools for Qt4
+
+It's recommended that you build Qt Communication Library not in the source
+directory, but in a separate directory. To do that, use the following commands:
+  $ mkdir $BUILD_DIRECTORY
+  $ cd $BUILD_DIRECTORY
+  $ qmake $SOURCE_DIRECTORY/qtcreator.pro
+  $ make (or mingw32-make or nmake or jom, depending on your platform)
+
+Other Notes
+===========
+The code has been inspired by QextSerialPort project. Get more information at
+http://code.google.com/p/qextserialport
+
+Removing all generated files on Linux/Mac can be done by running trunk/CLEAN.sh.
+Full recompilation on Linux/Mac can be done by running trunk/REBUILD.sh.
