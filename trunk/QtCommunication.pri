@@ -1,3 +1,4 @@
-LIBS += -L$$PWD/lib
-LIBS += -lQtCommunication
-INCLUDEPATH += $$PWD
+LIBS *= -L$$PWD/lib
+LIBS *= -L$$(PWD)/lib
+LIBS *= -lQtCommunication
+INCLUDEPATH *= $$PWD
