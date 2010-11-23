@@ -20,7 +20,7 @@ It's recommended that you build Qt Communication Library not in the source
 directory, but in a separate directory. To do that, use the following commands:
   $ mkdir $BUILD_DIRECTORY
   $ cd $BUILD_DIRECTORY
-  $ qmake $SOURCE_DIRECTORY/qtcreator.pro
+  $ qmake $SOURCE_DIRECTORY/QtCommunication.pro
   $ make (or mingw32-make or nmake or jom, depending on your platform)
 
 Other Notes
