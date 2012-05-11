@@ -31,6 +31,7 @@
 #ifndef Q_WS_WIN
     #include <fcntl.h> // File control definitions
     #include <errno.h> // Error number definitions
+    #include <unistd.h>
     #include <sys/ioctl.h>
 #endif // Q_WS_WIN
 
@@ -367,6 +368,7 @@ void SerialPort::setDataBits(DataBits dataBits)
     }
     SetCommConfig(d->portHandle, &d->commConfig, sizeof(COMMCONFIG));
 #else // Q_WS_WIN
+    d->commConfig.c_cflag &= ~CSIZE;
     switch (d->settings.dataBits) {
     case FiveDataBits:
         d->commConfig.c_cflag |= CS5;
@@ -381,7 +383,6 @@ void SerialPort::setDataBits(DataBits dataBits)
         d->commConfig.c_cflag |= CS8;
         break;
     }
-    d->commConfig.c_cflag &= ~CSIZE;
     tcsetattr(d->portHandle, TCSAFLUSH, &d->commConfig);
 #endif // Q_WS_WIN
 }
@@ -633,7 +634,7 @@ void SerialPort::setTimeout(ulong ms)
     SetCommTimeouts(d->portHandle, &d->timeout);
 #else // Q_WS_WIN
     d->timeout.tv_sec  = ms / 1000;
-    d->timeout.tv_usec = ms % 1000;
+    d->timeout.tv_usec = (ms % 1000) * 1000;
     tcgetattr(d->portHandle, &d->commConfig);
     d->commConfig.c_cc[VTIME] = ms / 100;
     tcsetattr(d->portHandle, TCSAFLUSH, &d->commConfig);
@@ -873,11 +874,16 @@ bool SerialPort::open(OpenMode mode)
     d->commConfig.c_oflag &= ~OPOST;
 
     d->commConfig.c_cc[VMIN] = 0;
-    d->commConfig.c_cc[VINTR] = _POSIX_VDISABLE;
-    d->commConfig.c_cc[VQUIT] = _POSIX_VDISABLE;
-    d->commConfig.c_cc[VSTART] = _POSIX_VDISABLE;
-    d->commConfig.c_cc[VSTOP] = _POSIX_VDISABLE;
-    d->commConfig.c_cc[VSUSP] = _POSIX_VDISABLE;
+#ifdef _POSIX_VDISABLE // Is a disable character available on this system?
+    // Some systems allow for per-device disable-characters, so get the
+    //  proper value for the configured device
+    const long vdisable = ::fpathconf(d->portHandle, _PC_VDISABLE);
+    d->commConfig.c_cc[VINTR] = vdisable;
+    d->commConfig.c_cc[VQUIT] = vdisable;
+    d->commConfig.c_cc[VSTART] = vdisable;
+    d->commConfig.c_cc[VSTOP] = vdisable;
+    d->commConfig.c_cc[VSUSP] = vdisable;
+#endif //_POSIX_VDISABLE
 
     tcsetattr(d->portHandle, TCSAFLUSH, &d->commConfig);
 #endif // Q_WS_WIN
@@ -956,7 +962,7 @@ qint64 SerialPort::bytesAvailable()
     FD_SET(d->portHandle, &fileSet);
     struct timeval timeoutCopy;
     memcpy(&timeoutCopy, &d->timeout, sizeof(struct timeval));
-    const int n = select(d->portHandle + 1, &fileSet, 0, &fileSet, &d->timeout);
+    const int n = select(d->portHandle + 1, &fileSet, 0, 0, &d->timeout);
     memcpy(&d->timeout, &timeoutCopy, sizeof(struct timeval));
     if (n == 0) {
 //        d->lastError = PortTimeoutError;
