@@ -23,11 +23,11 @@ SRC_DIR = QtCommunication
 ### Sources
 
 PUBLIC_HEADERS += $${SRC_DIR}/serialport.h
+PUBLIC_HEADERS += $${SRC_DIR}/QtCommunication_public.h
 HEADERS += $${SRC_DIR}/serialport_p.h
 SOURCES += $${SRC_DIR}/serialport.cpp
 
 ### Add public headers with other headers
-HEADERS += $$PWD/QtCommunication_public.h
 HEADERS += $${PUBLIC_HEADERS}
 
 

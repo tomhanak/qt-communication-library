@@ -23,7 +23,7 @@
 
 #include <QtCore/QIODevice>
 
-#include "../QtCommunication_public.h"
+#include "QtCommunication_public.h"
 
 // QCL - QtCommunicationLibrary
 namespace qcl {
