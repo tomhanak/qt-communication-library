@@ -853,6 +853,7 @@ bool SerialPort::open(OpenMode mode)
     d->commConfig.dcb.fOutX = FALSE;
     d->commConfig.dcb.fAbortOnError = FALSE;
     d->commConfig.dcb.fNull = FALSE;
+    d->commConfig.dcb.fDtrControl = TRUE; // Needed for some converters
 
     SetCommConfig(d->portHandle, &d->commConfig, sizeof(COMMCONFIG));
 #else // Q_WS_WIN
