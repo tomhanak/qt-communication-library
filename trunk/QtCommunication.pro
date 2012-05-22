@@ -12,7 +12,9 @@ DEFINES *= QTCOMMUNICATION_LIBRARY
 ### General settings
 TEMPLATE = lib
 CONFIG -= debug_and_release
-CONFIG += qt release warn_on thread
+#CONFIG += debug
+CONFIG += release
+CONFIG += qt warn_on thread
 QT -= gui
 
 DESTDIR = lib
@@ -22,13 +24,12 @@ SRC_DIR = QtCommunication
 
 
 ### Sources
-
 PUBLIC_HEADERS += $${SRC_DIR}/serialport.h
 PUBLIC_HEADERS += $${SRC_DIR}/QtCommunication_public.h
 HEADERS += $${SRC_DIR}/serialport_p.h
 SOURCES += $${SRC_DIR}/serialport.cpp
 
-### Add public headers with other headers
+### Add public headers to other headers
 HEADERS += $${PUBLIC_HEADERS}
 
 
