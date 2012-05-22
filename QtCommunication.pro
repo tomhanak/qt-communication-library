@@ -1,6 +1,7 @@
 ### Library settings
 TARGET = QtCommunication
 unix:VERSION = 1.0.0
+DEFINES *= QTCOMMUNICATION_LIBRARY
 
 ### Available switches
 #DEFINES *= QTCOMMUNICATION_SERIALPORT_NO_WARNINGS
