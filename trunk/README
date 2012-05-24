@@ -29,4 +29,6 @@ The code has been inspired by QextSerialPort project. Get more information at
 http://code.google.com/p/qextserialport
 
 Removing all generated files on Linux/Mac can be done by running trunk/CLEAN.sh.
+Removing all generated files on Windows can be done by running trunk/CLEAN.bat.
 Full recompilation on Linux/Mac can be done by running trunk/REBUILD.sh.
+Full recompilation on Windows can be done by running trunk/REBUILD.bat.
