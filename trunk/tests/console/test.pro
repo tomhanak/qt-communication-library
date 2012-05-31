@@ -5,6 +5,7 @@ TARGET = test_serialport
 TEMPLATE = app
 QT -= gui
 win32:CONFIG += console
+macx:CONFIG -= app_bundle
 
 DESTDIR = bin
 
