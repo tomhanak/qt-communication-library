@@ -60,7 +60,7 @@ private:
 
 private:
     Q_DECLARE_PUBLIC(SerialPort);
-    SerialPort *q_ptr;
+    SerialPort *const q_ptr;
 
 private:
     QMutex *const mutex;

@@ -261,7 +261,7 @@ Q_SIGNALS:
 
 private:
     Q_DECLARE_PRIVATE(SerialPort);
-    SerialPortPrivate *d_ptr;
+    SerialPortPrivate *const d_ptr;
 };
 
 } // namespace qcl
