@@ -87,7 +87,6 @@ SerialPort::SerialPort(const QString &portName, const Settings &settings,
 SerialPort::~SerialPort()
 {
     delete d_ptr;
-    d_ptr = 0;
 }
 
 QString SerialPort::portName() const
