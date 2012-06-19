@@ -90,6 +90,66 @@ SerialPort::~SerialPort()
     d_ptr = 0;
 }
 
+QString SerialPort::portName() const
+{
+    Q_D(const SerialPort);
+    QMutexLocker(d->mutex);
+
+    QString portName = d->portName;
+#ifdef Q_WS_WIN
+    portName.remove(QRegExp("\\\\.\\"));
+#endif // Q_WS_WIN
+    return portName;
+}
+
+SerialPort::BaudRate SerialPort::baudRate() const
+{
+    Q_D(const SerialPort);
+    return d->settings.baudRate;
+}
+
+uint SerialPort::baudRateAsNumber() const
+{
+    Q_D(const SerialPort);
+    return static_cast<uint>(d->settings.baudRate);
+}
+
+SerialPort::DataBits SerialPort::dataBits() const
+{
+    Q_D(const SerialPort);
+    return d->settings.dataBits;
+}
+
+SerialPort::Parity SerialPort::parity() const
+{
+    Q_D(const SerialPort);
+    return d->settings.parity;
+}
+
+SerialPort::StopBits SerialPort::stopBits() const
+{
+    Q_D(const SerialPort);
+    return d->settings.stopBits;
+}
+
+SerialPort::FlowControl SerialPort::flowControl() const
+{
+    Q_D(const SerialPort);
+    return d->settings.flowControl;
+}
+
+ulong SerialPort::timeout() const
+{
+    Q_D(const SerialPort);
+    return d->settings.timeout;
+}
+
+bool SerialPort::autoFlushOnWrite() const
+{
+    Q_D(const SerialPort);
+    return d->autoFlushOnWrite;
+}
+
 void SerialPort::setPortName(const QString &portName)
 {
     Q_D(SerialPort);
@@ -103,18 +163,6 @@ void SerialPort::setPortName(const QString &portName)
 #ifdef Q_WS_WIN
     d->portName.prepend("\\\\.\\");
 #endif // Q_WS_WIN
-}
-
-QString SerialPort::portName() const
-{
-    Q_D(const SerialPort);
-    QMutexLocker(d->mutex);
-
-    QString portName = d->portName;
-#ifdef Q_WS_WIN
-    portName.remove(QRegExp("\\\\.\\"));
-#endif // Q_WS_WIN
-    return portName;
 }
 
 void SerialPort::setBaudRate(BaudRate baudRate)
@@ -145,18 +193,6 @@ void SerialPort::setBaudRate(BaudRate baudRate)
 #endif // CBAUD
     tcsetattr(d->portHandle, TCSAFLUSH, &d->commConfig);
 #endif // Q_WS_WIN
-}
-
-SerialPort::BaudRate SerialPort::baudRate() const
-{
-    Q_D(const SerialPort);
-    return d->settings.baudRate;
-}
-
-QList<SerialPort::BaudRate> SerialPort::supportedBaudRates() const
-{
-    Q_D(const SerialPort);
-    return d->platformBaudRateHash.keys();
 }
 
 bool SerialPort::setBaudRateFromNumber(uint baudRate)
@@ -252,24 +288,6 @@ bool SerialPort::setBaudRateFromNumber(uint baudRate)
     return true;
 }
 
-uint SerialPort::baudRateAsNumber() const
-{
-    Q_D(const SerialPort);
-    return static_cast<uint>(d->settings.baudRate);
-}
-
-QList<uint> SerialPort::supportedBaudRatesAsNumber() const
-{
-    Q_D(const SerialPort);
-
-    QList<uint> supportedBaudRates;
-    const QList<BaudRate> keys = d->platformBaudRateHash.keys();
-    Q_FOREACH(BaudRate baudRate, keys) {
-        supportedBaudRates << d->baudRate_EnumToNumber(baudRate);
-    }
-    return supportedBaudRates;
-}
-
 void SerialPort::setDataBits(DataBits dataBits)
 {
     Q_D(SerialPort);
@@ -335,12 +353,6 @@ void SerialPort::setDataBits(DataBits dataBits)
     }
     tcsetattr(d->portHandle, TCSAFLUSH, &d->commConfig);
 #endif // Q_WS_WIN
-}
-
-SerialPort::DataBits SerialPort::dataBits() const
-{
-    Q_D(const SerialPort);
-    return d->settings.dataBits;
 }
 
 void SerialPort::setParity(Parity parity)
@@ -435,12 +447,6 @@ void SerialPort::setParity(Parity parity)
 #endif // Q_WS_WIN
 }
 
-SerialPort::Parity SerialPort::parity() const
-{
-    Q_D(const SerialPort);
-    return d->settings.parity;
-}
-
 void SerialPort::setStopBits(StopBits stopBits)
 {
     Q_D(SerialPort);
@@ -499,12 +505,6 @@ void SerialPort::setStopBits(StopBits stopBits)
 #endif // Q_WS_WIN
 }
 
-SerialPort::StopBits SerialPort::stopBits() const
-{
-    Q_D(const SerialPort);
-    return d->settings.stopBits;
-}
-
 void SerialPort::setFlowControl(FlowControl flowControl)
 {
     Q_D(SerialPort);
@@ -559,12 +559,6 @@ void SerialPort::setFlowControl(FlowControl flowControl)
 #endif // Q_WS_WIN
 }
 
-SerialPort::FlowControl SerialPort::flowControl() const
-{
-    Q_D(const SerialPort);
-    return d->settings.flowControl;
-}
-
 void SerialPort::setTimeout(ulong ms)
 {
     Q_D(SerialPort);
@@ -591,12 +585,6 @@ void SerialPort::setTimeout(ulong ms)
 #endif // Q_WS_WIN
 }
 
-ulong SerialPort::timeout() const
-{
-    Q_D(const SerialPort);
-    return d->settings.timeout;
-}
-
 void SerialPort::setAutoFlushOnWrite(bool enabled)
 {
     Q_D(SerialPort);
@@ -608,52 +596,6 @@ void SerialPort::setAutoFlushOnWrite(bool enabled)
     Q_EMIT autoFlushOnWriteChanged(enabled);
 }
 
-bool SerialPort::autoFlushOnWrite() const
-{
-    Q_D(const SerialPort);
-    return d->autoFlushOnWrite;
-}
-
-SerialPort::Settings SerialPort::settings() const
-{
-    Q_D(const SerialPort);
-    return d->settings;
-}
-
-SerialPort::LineStatus SerialPort::lineStatus() const
-{
-    Q_D(const SerialPort);
-    QMutexLocker(d->mutex);
-
-    LineStatus status = NoLineState;
-
-    if (!isOpen())
-        return status;
-
-    ulong tmp = 0;
-#ifdef Q_WS_WIN
-    if (GetCommModemStatus(d->portHandle, &tmp)) {
-        if (tmp & MS_CTS_ON) status |= CtsLineState;
-        if (tmp & MS_DSR_ON) status |= DsrLineState;
-        if (tmp & MS_RING_ON) status |= RiLineState;
-        if (tmp & MS_RLSD_ON) status |= DcdLineState;
-    }
-#else // Q_WS_WIN
-    if (0 == ioctl(d->portHandle, TIOCMGET, &tmp)) {
-        if (tmp & TIOCM_CTS) status |= CtsLineState;
-        if (tmp & TIOCM_DSR) status |= DsrLineState;
-        if (tmp & TIOCM_RI) status |= RiLineState;
-        if (tmp & TIOCM_CD) status |= DcdLineState;
-        if (tmp & TIOCM_DTR) status |= DtrLineState;
-        if (tmp & TIOCM_RTS) status |= RtsLineState;
-        if (tmp & TIOCM_ST) status |= StLineState;
-        if (tmp & TIOCM_SR) status |= SrLineState;
-    }
-#endif // Q_WS_WIN
-
-    return status;
-}
-
 bool SerialPort::DSR() const
 {
     Q_D(const SerialPort);
@@ -661,6 +603,15 @@ bool SerialPort::DSR() const
 
     LineStatus status = lineStatus();
     return status.testFlag(DsrLineState);
+}
+
+bool SerialPort::CTS() const
+{
+    Q_D(const SerialPort);
+    QMutexLocker(d->mutex);
+
+    const LineStatus status = lineStatus();
+    return status.testFlag(CtsLineState);
 }
 
 void SerialPort::setDTR(bool value)
@@ -682,15 +633,6 @@ void SerialPort::setDTR(bool value)
         status &= ~TIOCM_DTR;
     ioctl(d->portHandle, TIOCMSET, &status);
 #endif // Q_WS_WIN
-}
-
-bool SerialPort::CTS() const
-{
-    Q_D(const SerialPort);
-    QMutexLocker(d->mutex);
-
-    const LineStatus status = lineStatus();
-    return status.testFlag(CtsLineState);
 }
 
 void SerialPort::setRTS(bool value)
@@ -756,6 +698,64 @@ void SerialPort::clearLastError()
 {
     Q_D(SerialPort);
     d->lastError = NoError;
+}
+
+QList<SerialPort::BaudRate> SerialPort::supportedBaudRates() const
+{
+    Q_D(const SerialPort);
+    return d->platformBaudRateHash.keys();
+}
+
+QList<uint> SerialPort::supportedBaudRatesAsNumber() const
+{
+    Q_D(const SerialPort);
+
+    QList<uint> supportedBaudRates;
+    const QList<BaudRate> keys = d->platformBaudRateHash.keys();
+    Q_FOREACH(BaudRate baudRate, keys) {
+        supportedBaudRates << d->baudRate_EnumToNumber(baudRate);
+    }
+    return supportedBaudRates;
+}
+
+SerialPort::Settings SerialPort::settings() const
+{
+    Q_D(const SerialPort);
+    return d->settings;
+}
+
+SerialPort::LineStatus SerialPort::lineStatus() const
+{
+    Q_D(const SerialPort);
+    QMutexLocker(d->mutex);
+
+    LineStatus status = NoLineState;
+
+    if (!isOpen())
+        return status;
+
+    ulong tmp = 0;
+#ifdef Q_WS_WIN
+    if (GetCommModemStatus(d->portHandle, &tmp)) {
+        if (tmp & MS_CTS_ON) status |= CtsLineState;
+        if (tmp & MS_DSR_ON) status |= DsrLineState;
+        if (tmp & MS_RING_ON) status |= RiLineState;
+        if (tmp & MS_RLSD_ON) status |= DcdLineState;
+    }
+#else // Q_WS_WIN
+    if (0 == ioctl(d->portHandle, TIOCMGET, &tmp)) {
+        if (tmp & TIOCM_CTS) status |= CtsLineState;
+        if (tmp & TIOCM_DSR) status |= DsrLineState;
+        if (tmp & TIOCM_RI) status |= RiLineState;
+        if (tmp & TIOCM_CD) status |= DcdLineState;
+        if (tmp & TIOCM_DTR) status |= DtrLineState;
+        if (tmp & TIOCM_RTS) status |= RtsLineState;
+        if (tmp & TIOCM_ST) status |= StLineState;
+        if (tmp & TIOCM_SR) status |= SrLineState;
+    }
+#endif // Q_WS_WIN
+
+    return status;
 }
 
 /*******************************************************************************
