@@ -84,56 +84,6 @@ SerialPort::SerialPort(const QString &portName, const Settings &settings,
     setTimeout(settings.timeout);
 }
 
-SerialPort::SerialPort(const SerialPort &serialPort)
-    : QIODevice(serialPort.parent()),
-    d_ptr(new SerialPortPrivate(this))
-{
-    Q_D(SerialPort);
-
-    setOpenMode(serialPort.openMode());
-    setPortName(serialPort.portName());
-    setBaudRate(serialPort.baudRate());
-    setDataBits(serialPort.dataBits());
-    setFlowControl(serialPort.flowControl());
-    setParity(serialPort.parity());
-    setStopBits(serialPort.stopBits());
-    setTimeout(serialPort.timeout());
-
-    d->lastError = serialPort.lastError();
-
-#ifdef Q_WS_WIN
-    memcpy(&d->commConfig, &serialPort.d_ptr->commConfig, sizeof(COMMCONFIG));
-#else // Q_WS_WIN
-    memcpy(&d->commConfig, &serialPort.d_ptr->commConfig, sizeof(struct termios));
-#endif // Q_WS_WIN
-}
-
-SerialPort &SerialPort::operator=(const SerialPort &serialPort)
-{
-    Q_D(SerialPort);
-
-    setParent(serialPort.parent());
-
-    setOpenMode(serialPort.openMode());
-    setPortName(serialPort.portName());
-    setBaudRate(serialPort.baudRate());
-    setDataBits(serialPort.dataBits());
-    setFlowControl(serialPort.flowControl());
-    setParity(serialPort.parity());
-    setStopBits(serialPort.stopBits());
-    setTimeout(serialPort.timeout());
-
-    d->lastError = serialPort.lastError();
-
-#ifdef Q_WS_WIN
-    memcpy(&d->commConfig, &serialPort.d_ptr->commConfig, sizeof(COMMCONFIG));
-#else // Q_WS_WIN
-    memcpy(&d->commConfig, &serialPort.d_ptr->commConfig, sizeof(struct termios));
-#endif // Q_WS_WIN
-
-    return *this;
-}
-
 SerialPort::~SerialPort()
 {
     delete d_ptr;
