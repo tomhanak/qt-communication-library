@@ -1,13 +1,20 @@
 Qt Communication Library
 ========================
 Qt Communication Library is a multiplatform C++ library written for
-communication with custom devices e.g. via serial port.
+communication with various kind of devices.
+
+Supported interfaces:
+=====================
+  * Serial ports
+  * USB to Serial port converters
 
 Supported Platforms
 ===================
 The functionality has been tested on the following platforms:
-  * Windows XP SP3
-  * Arch Linux 32-bit and 64-bit
+  * Windows XP SP3 32bits
+  * Windows 7 SP1 64bits
+  * Arch Linux 32bits
+  * Arch Linux 64bits
   * Mac OS X 10.6
 
 Compiling sources
@@ -17,18 +24,20 @@ Prerequisites:
   * Qt SDK or development tools for Qt4
 
 It's recommended that you build Qt Communication Library not in the source
-directory, but in a separate directory. To do that, use the following commands:
-  $ mkdir $BUILD_DIRECTORY
-  $ cd $BUILD_DIRECTORY
-  $ qmake $SOURCE_DIRECTORY/QtCommunication.pro
-  $ make (or mingw32-make or nmake or jom, depending on your platform)
+directory, but in a separate directory. To do that, use the following commands
+as normal user:
+  mkdir $BUILD_DIRECTORY
+  cd $BUILD_DIRECTORY
+  qmake $SOURCE_DIRECTORY/QtCommunication.pro
+  make (or mingw32-make or nmake or jom, depending on your platform)
+  make install (super user rights might be needed)
+or use following scripts:
+  * trunk/REBUILD.sh - cleans and recompiles all sources on Linux/Mac
+  * trunk/REBUILD.bat - cleans and recompiles all sources on Windows
+  * trunk/CLEAN.sh - removes all generated files on Linux/Mac
+  * trunk/CLEAN.bat - removes all generated files on Windows
 
 Other Notes
 ===========
 The code has been inspired by QextSerialPort project. Get more information at
 http://code.google.com/p/qextserialport
-
-Removing all generated files on Linux/Mac can be done by running trunk/CLEAN.sh.
-Removing all generated files on Windows can be done by running trunk/CLEAN.bat.
-Full recompilation on Linux/Mac can be done by running trunk/REBUILD.sh.
-Full recompilation on Windows can be done by running trunk/REBUILD.bat.
