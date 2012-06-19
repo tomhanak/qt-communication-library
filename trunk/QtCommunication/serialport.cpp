@@ -907,6 +907,8 @@ void SerialPort::close()
     if (!isOpen())
         return;
 
+    QIODevice::close();
+
     purge();
 
 #ifdef Q_WS_WIN
@@ -916,7 +918,6 @@ void SerialPort::close()
 #endif // Q_WS_WIN
 
     d->portHandle = INVALID_HANDLE_VALUE;
-    QIODevice::close();
 }
 
 qint64 SerialPort::size() const
