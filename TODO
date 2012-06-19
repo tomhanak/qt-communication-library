@@ -1,3 +1,13 @@
-- Add serial port enumeration feature
-- Add some helper for AT commands
+TODOs sorted by priority
+========================
+- Add internally "/dev/" to relative portName on POSIX platforms like on Win
+- Add translatable human-readable error strings using setErrorString
+  (Add error translations into library, react to LanguageChange event)
+- Extend Error enumeration
+- Add signal readyRead
+- Investigate possibility to have signals like dsrChanged, ctsChanged
+  (then add dtrChanged, rtsChanged)
+- Change SerialPort to be fully event driven
 - Add new baud rate 28800 and/or custom rate
+- Add some helper for AT commands
+- Add serial port enumeration feature
