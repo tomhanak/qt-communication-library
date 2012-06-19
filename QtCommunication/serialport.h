@@ -195,41 +195,31 @@ public:
     virtual ~SerialPort();
 
 public:
-    void setPortName(const QString &portName);
     QString portName() const;
-
-    void setBaudRate(BaudRate baudRate);
     BaudRate baudRate() const;
-    QList<BaudRate> supportedBaudRates() const;
-
-    bool setBaudRateFromNumber(uint baudRate);
     uint baudRateAsNumber() const;
-    QList<uint> supportedBaudRatesAsNumber() const;
-
-    void setDataBits(DataBits dataBits);
     DataBits dataBits() const;
-
-    void setParity(Parity parity);
     Parity parity() const;
-
-    void setStopBits(StopBits stopBits);
     StopBits stopBits() const;
-
-    void setFlowControl(FlowControl flowControl);
     FlowControl flowControl() const;
-
-    void setTimeout(ulong ms);
     ulong timeout() const;
-
-    void setAutoFlushOnWrite(bool enabled);
     bool autoFlushOnWrite() const;
 
-    Settings settings() const;
+public Q_SLOTS:
+    void setPortName(const QString &portName);
+    void setBaudRate(BaudRate baudRate);
+    bool setBaudRateFromNumber(uint baudRate);
+    void setDataBits(DataBits dataBits);
+    void setParity(Parity parity);
+    void setStopBits(StopBits stopBits);
+    void setFlowControl(FlowControl flowControl);
+    void setTimeout(ulong ms);
+    void setAutoFlushOnWrite(bool enabled);
 
-    LineStatus lineStatus() const;
+public:
     bool DSR() const;
-    void setDTR(bool value);
     bool CTS() const;
+    void setDTR(bool value);
     void setRTS(bool value);
 
     void flush();
@@ -237,6 +227,13 @@ public:
 
     Error lastError() const;
     void clearLastError();
+
+    QList<BaudRate> supportedBaudRates() const;
+    QList<uint> supportedBaudRatesAsNumber() const;
+
+    Settings settings() const;
+
+    LineStatus lineStatus() const;
 
 public: // QIODevice
     virtual bool isSequential() const;
