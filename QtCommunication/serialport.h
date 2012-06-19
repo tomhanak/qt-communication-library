@@ -33,6 +33,8 @@ class SerialPortPrivate;
 class QTCOMMUNICATION_EXPORT SerialPort : public QIODevice
 {
     Q_OBJECT
+    Q_DISABLE_COPY(SerialPort)
+
     Q_PROPERTY(QString portName
             READ portName WRITE setPortName NOTIFY portNameChanged)
     Q_PROPERTY(BaudRate baudRate
@@ -50,6 +52,7 @@ class QTCOMMUNICATION_EXPORT SerialPort : public QIODevice
             NOTIFY autoFlushOnWriteChanged)
     Q_PROPERTY(LineStatus lineStatus READ lineStatus)
     Q_PROPERTY(Error lastError READ lastError)
+
     Q_ENUMS(BaudRate)
     Q_ENUMS(DataBits)
     Q_ENUMS(Parity)
@@ -189,8 +192,6 @@ public:
     SerialPort(const Settings &settings, QObject *parent = 0);
     SerialPort(const QString &portName, const Settings &settings, QObject
             *parent = 0);
-    SerialPort(const SerialPort &serialPort);
-    SerialPort &operator=(const SerialPort &serialPort);
     virtual ~SerialPort();
 
 public:
