@@ -160,7 +160,13 @@ void SerialPort::setPortName(const QString &portName)
     }
 
 #ifdef Q_WS_WIN
-    d->portName.prepend("\\\\.\\");
+    const QString path = "\\\\.\\";
+    if (!portName.startsWith(path))
+        d->portName.prepend(path);
+#else // Q_WS_WIN
+    const QString path = "/dev/";
+    if (!portName.startsWith("/"))
+        d->portName.prepend(path);
 #endif // Q_WS_WIN
 }
 
