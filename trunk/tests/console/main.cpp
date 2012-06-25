@@ -14,14 +14,17 @@ int main(int /*argc*/, char **/*argv*/)
     qDebug();
 
 #ifdef Q_WS_WIN
+    //QString portName = "\\\\.\\COM1";
     QString portName = "COM1";
 #else
 #ifdef Q_WS_MAC
     //QString portName = "/dev/tty.Bluetooth-Modem";
     QString portName = "/dev/cu.Bluetooth-Modem";
+    //QString portName = "cu.Bluetooth-Modem";
 #else
     //QString strPort = "/dev/ttyUSB0";
     QString portName = "/dev/ttyS0";
+    //QString portName = "ttyS0";
 #endif
 #endif
 
