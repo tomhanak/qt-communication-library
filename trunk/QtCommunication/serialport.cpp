@@ -96,7 +96,7 @@ QString SerialPort::portName() const
 
     QString portName = d->portName;
 #ifdef Q_WS_WIN
-    portName.remove(QRegExp("\\\\.\\"));
+    portName.remove("\\\\.\\");
 #endif // Q_WS_WIN
     return portName;
 }
