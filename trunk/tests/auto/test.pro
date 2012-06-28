@@ -1,9 +1,10 @@
 ### Library settings
-TARGET = test_console_serialport
+TARGET = test_auto
 
 ### General settings
 TEMPLATE = app
 QT -= gui
+QT += testlib
 CONFIG += console
 CONFIG -= app_bundle
 
@@ -21,4 +22,7 @@ macx {
 
 ### Sources
 
-SOURCES += main_console.cpp
+HEADERS += test_serialport.h
+SOURCES += test_serialport.cpp
+
+SOURCES += main_auto.cpp

@@ -14,8 +14,10 @@ pushd "%BUILD_DIR%"
 
 qmake ../QtCommunication.pro -o Makefile.QtCommunication && (
     %MAKE% %MAKE_ARGS% -f Makefile.QtCommunication && (
-    qmake ../tests/console/test.pro -o Makefile.test && (
-    %MAKE% %MAKE_ARGS% -f Makefile.test
-)))
+    qmake ../tests/auto/test.pro -o Makefile.test_auto && (
+    %MAKE% %MAKE_ARGS% -f Makefile.test_auto && (
+    qmake ../tests/console/test.pro -o Makefile.test_console && (
+    %MAKE% %MAKE_ARGS% -f Makefile.test_console
+)))))
 
 popd "%OLD_DIR%"
