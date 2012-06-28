@@ -18,6 +18,7 @@ CONFIG += qt warn_on thread
 QT -= gui
 
 DESTDIR = lib
+DLLDESTDIR = bin
 
 ### Directory with sources
 SRC_DIR = QtCommunication
